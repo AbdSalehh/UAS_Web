@@ -1,95 +1,98 @@
-<div class="header">
-    <div class="container">
-        <div class="navbar">
-            <div class="logo">
-                <a href="/"><img src="{{asset('img/logo.png')}}" width="125px"></a>
+<main>
+    <div class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <a href="/"><img src="{{asset('img/logo.png')}}" width="125px"></a>
+                </div>
+                <nav>
+                    <ul id="MenuItems">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/product">Products</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        @if(Route::has('login'))
+                        @auth
+                        @if(Auth::user()->utype === 'ADM')
+                        <li>
+                            <div class="dropdown">
+                                <button class="dropbtn">Halo ({{Auth::user()->name}})
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="{{ route('admin.user')}}">Dashboard</a>
+                                    <a href="{{ route('logout')}}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                </div>
+                                <form id="logout-form" method="POST" action="{{route ('logout')}}">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                        @else
+                        <li>
+                            <div class="dropdown">
+                                <button class="dropbtn">Hallo ({{Auth::user()->name}})
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="{{ route('user.dashboard')}}">Dashboard</a>
+                                    <a href="{{ route('logout')}}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                </div>
+                                <form id="logout-form" method="POST" action="{{route ('logout')}}">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                        @endif
+                        @else
+                        <li>
+                            <div class="dropdown">
+                                <button class="dropbtn ">Account
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="{{route('login')}}">Login</a>
+                                    <a href="{{route('register')}}">Register</a>
+                                </div>
+                            </div>
+                        </li>
+                        @endif
+                        @endif
+                    </ul>
+                </nav>
+                <a href="/cart"><img src="{{asset('img/cart.png')}}" class="cart-icon" width="30px" height="30px"
+                        style="margin-top: 15px;"></a>
+                <img src="{{asset('img/menu.png')}}" class="menu-icon" width="50px" height="50px"
+                    onclick="menutoggle()">
             </div>
-            <nav>
-                <ul id="MenuItems">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/product">Products</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                    @if(Route::has('login'))
-                    @auth
-                    @if(Auth::user()->utype === 'ADM')
-                    <li>
-                        <div class="dropdown">
-                            <button class="dropbtn">Halo ({{Auth::user()->name}})
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="{{ route('admin.user')}}">Dashboard</a>
-                                <a href="{{ route('logout')}}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                            </div>
-                            <form id="logout-form" method="POST" action="{{route ('logout')}}">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                    @else
-                    <li>
-                        <div class="dropdown">
-                            <button class="dropbtn">Hallo ({{Auth::user()->name}})
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="{{ route('user.dashboard')}}">Dashboard</a>
-                                <a href="{{ route('logout')}}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                            </div>
-                            <form id="logout-form" method="POST" action="{{route ('logout')}}">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                    @endif
-                    @else
-                    <li>
-                        <div class="dropdown">
-                            <button class="dropbtn ">Account
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="{{route('login')}}">Login</a>
-                                <a href="{{route('register')}}">Register</a>
-                            </div>
-                        </div>
-                    </li>
-                    @endif
-                    @endif
-                </ul>
-            </nav>
-            <a href="/cart"><img src="{{asset('img/cart.png')}}" class="cart-icon" width="30px" height="30px"
-                    style="margin-top: 15px;"></a>
-            <img src="{{asset('img/menu.png')}}" class="menu-icon" width="50px" height="50px" onclick="menutoggle()">
         </div>
     </div>
-</div>
-<div class="smalll-container single-product">
-    <div class="row">
-        <div class="col-2">
-            <img src="{{asset('img/produk')}}/{{$product->image}}" width="65%">
-        </div>
-        <div class="col-2">
-            <p><a href="/" class="fa fa-home"></a> / Aksesoris</p>
-            <h1>{{$product->name}}</h1>
-            <h4>Rp. {{$product->regular_price}}</h4>
-            <select>
-                <option>Pilih Warna</option>
-                <option>Hitam</option>
-                <option>Putih</option>
-            </select>
-            <input type="number" value="1">
-            <a href="#" wire:click.prevent="store({{$product->id}}, '{{$product->name}}', {{$product->regular_price}})"
-                class="btn"> Add To Cart </a>
-            <h3>Stok : {{$product->stock_status}}</h3>
-            <h3>Product Details <i class="fa fa-indent"></i></h3>
-            <p>{{$product->description}}</p>
+    <div class="smalll-container single-product">
+        <div class="row">
+            <div class="col-2">
+                <img src="{{asset('img/produk')}}/{{$product->image}}" width="65%">
+            </div>
+            <div class="col-2">
+                <p><a href="/" class="fa fa-home"></a> / Aksesoris</p>
+                <h1>{{$product->name}}</h1>
+                <h4>Rp. {{$product->regular_price}}</h4>
+                <select>
+                    <option>Pilih Warna</option>
+                    <option>Hitam</option>
+                    <option>Putih</option>
+                </select>
+                <input type="number" value="1">
+                <a href="#"
+                    wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->regular_price}}')"
+                    class="btn"> Add To Cart </a>
+                <h3>Stok : {{$product->stock_status}}</h3>
+                <h3>Product Details <i class="fa fa-indent"></i></h3>
+                <p>{{$product->description}}</p>
+            </div>
         </div>
     </div>
-</div>
-
+</main>
 <div class="small-container">
     <div class="row row-2">
         <h2>Produk Lainnya</h2>
